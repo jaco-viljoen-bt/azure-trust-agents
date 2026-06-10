@@ -275,18 +275,6 @@ else
     azureAIConnectionId=""
 fi
 
-# Construct Azure AI Project Resource ID
-azureAIProjectResourceId=""
-if [ -n "$aiFoundryHubName" ] && [ -n "$aiFoundryProjectName" ]; then
-    if [ -z "$subscriptionId" ]; then
-        subscriptionId=$(az account show --query id -o tsv 2>/dev/null || echo "")
-    fi
-    if [ -n "$subscriptionId" ]; then
-        azureAIProjectResourceId="/subscriptions/${subscriptionId}/resourceGroups/${resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/${aiFoundryHubName}/projects/${aiFoundryProjectName}"
-        echo "Constructed AI Project Resource ID: $azureAIProjectResourceId"
-    fi
-fi
-
 # Note: AI Foundry Project Endpoint construction is handled later in the script
 
 # Overwrite the existing .env file
@@ -373,8 +361,6 @@ elif [ -n "$aiFoundryProjectEndpoint" ] && [[ "$aiFoundryProjectEndpoint" == *"a
 fi
 echo "AI_FOUNDRY_PROJECT_ENDPOINT=\"$aiFoundryProjectEndpoint\"" >> ../.env
 echo "AZURE_AI_CONNECTION_ID=\"$azureAIConnectionId\"" >> ../.env
-echo "RESOURCE_GROUP=\"$resourceGroupName\"" >> ../.env
-echo "AZURE_AI_PROJECT_RESOURCE_ID=\"$azureAIProjectResourceId\"" >> ../.env
 # Azure Cosmos DB
 echo "COSMOS_ENDPOINT=\"$cosmosDbEndpoint\"" >> ../.env
 echo "COSMOS_KEY=\"$cosmosDbKey\"" >> ../.env
