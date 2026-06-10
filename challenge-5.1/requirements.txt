@@ -1,0 +1,10 @@
+# Challenge 5.1 – Risk Analyzer Structured Evaluation
+# All packages are already present in the top-level requirements.txt.
+# Listed here so this challenge can be run in isolation.
+
+azure-ai-evaluation>=1.9.0
+azure-ai-projects>=1.0.0b12
+azure-ai-agents>=1.2.0b5
+azure-cosmos
+azure-identity>=1.23.0
+python-dotenv
