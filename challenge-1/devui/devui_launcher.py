@@ -98,18 +98,22 @@ def launch_agents_mode(port: int = 8081):
         sys.exit(1)
 
 def launch_workflow_mode(port: int = 8082):
-    """Launch DevUI with workflow only"""
+    """Launch DevUI with workflows only"""
     from agent_framework.devui import serve
     
-    # Import workflow
+    # Import workflows
     try:
         from fraud_detection_workflow import workflow
+        from fraud_detection_workflow_chal2 import workflow as workflow_chal2
         
-        print(f"🚀 Launching DevUI with fraud detection workflow on port {port}")
-        print(f"🔄 Workflow: {workflow.name}")
+        workflows = [workflow, workflow_chal2]
+        
+        print(f"🚀 Launching DevUI with fraud detection workflows on port {port}")
+        for wf in workflows:
+            print(f"🔄 Workflow: {wf.name}")
         print(f"🌐 Access at: http://localhost:{port}")
         
-        serve(entities=[workflow], port=port, auto_open=True)
+        serve(entities=workflows, port=port, auto_open=True)
         
     except ImportError as e:
         print(f"❌ Error importing workflow: {e}")
@@ -125,11 +129,12 @@ def launch_all_mode(port: int = 8080):
         from risk_analyser_agent import agent as risk_agent
         from compliance_report_agent import agent as compliance_agent
         from fraud_detection_workflow import workflow
+        from fraud_detection_workflow_chal2 import workflow as workflow_chal2
         
-        entities = [customer_agent, risk_agent, compliance_agent, workflow]
+        entities = [customer_agent, risk_agent, compliance_agent, workflow, workflow_chal2]
         
         print(f"🚀 Launching DevUI with all entities on port {port}")
-        print("🤖 Available agents:")
+        print("🤖 Available entities:")
         for entity in entities:
             if hasattr(entity, 'name'):
                 entity_type = "🔄 Workflow" if "workflow" in entity.__class__.__name__.lower() else "🤖 Agent"
@@ -137,8 +142,9 @@ def launch_all_mode(port: int = 8080):
         print(f"🌐 Access at: http://localhost:{port}")
         print("\n💡 You can interact with:")
         print("   • Individual agents for specific tasks")
-        print("   • The complete fraud detection workflow")
-        print("   • Test different transaction IDs (TX1001, TX2002, etc.)")
+        print("   • Challenge 1: 3-step fraud detection workflow")
+        print("   • Challenge 2: 4-executor parallel workflow (Compliance + Fraud Alert)")
+        print("   • Test different transaction IDs (TX1001, TX2002, TX1012, etc.)")
         
         serve(entities=entities, port=port, auto_open=True)
         
